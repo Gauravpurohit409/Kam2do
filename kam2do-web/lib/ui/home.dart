@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter_web/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,6 +10,29 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  List<ListTile> _toDoListTiles = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchToDos();
+  }
+
+  void fetchToDos() {
+    _toDoListTiles = [];
+    List<String> localStorageToDoKeys = window.localStorage.keys.toList();
+    localStorageToDoKeys.sort();
+    _toDoListTiles = localStorageToDoKeys
+        .map(
+          (e) => ListTile(
+            title: Text(window.localStorage[e]),
+            subtitle: Text(e),
+          ),
+        )
+        .toList()
+        .reversed
+        .toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +94,13 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Center(
-        child: Text('Kam2do'),
+      body: Container(
+        margin: EdgeInsets.all(16),
+        child: ListView(
+          children: <Widget>[
+            ..._toDoListTiles,
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -85,6 +115,15 @@ class _HomePageState extends State<HomePage> {
                       child: Text('Save'),
                       onPressed: () {
                         Navigator.pop(context);
+                        window.localStorage[DateTime.now().toString()] = [
+                          titleController.text,
+                          descriptionController.text
+                        ].toString();
+                        titleController.text = '';
+                        descriptionController.text = '';
+                        setState(() {
+                          fetchToDos();
+                        });
                         return showDialog(
                           context: context,
                           builder: (builder) => AlertDialog(
