@@ -2,9 +2,9 @@ name: kam2do_web
 description: ToDo app built using Flutter for web.
 version: 0.0.1
 authors:
-  - Gaurav Purohit <gauravpurohit.17.cs@iite.indusuni.ac.in>
+  - Gaurav Purohit <gauravpurohit409@gmail.com>
   - Tirth Patel <pateltirth454@gmail.com>
-  -
+
 environment:
   sdk: '>=2.3.0 <3.0.0'
 
