@@ -2,14 +2,20 @@ import 'dart:html';
 
 import 'package:flutter_web/material.dart';
 
+Function themer;
+
 class HomePage extends StatefulWidget {
+  HomePage(Function injectedThemer) {
+    themer = injectedThemer;
+  }
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
   List<ListTile> _toDoListTiles = [];
 
   @override
@@ -22,6 +28,7 @@ class _HomePageState extends State<HomePage> {
     _toDoListTiles = [];
     List<String> localStorageToDoKeys = window.localStorage.keys.toList();
     localStorageToDoKeys.sort();
+    localStorageToDoKeys.remove('theme');
     _toDoListTiles = localStorageToDoKeys
         .map(
           (e) => ListTile(
@@ -47,6 +54,19 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             onPressed: () => print,
             icon: Icon(Icons.favorite),
+          ),
+          IconButton(
+            onPressed: () {
+              if (window.localStorage.containsKey('theme')) {
+                Brightness newTheme = window.localStorage['theme'] == 'Dark'
+                    ? Brightness.light
+                    : Brightness.dark;
+                window.localStorage['theme'] =
+                    window.localStorage['theme'] == 'Dark' ? 'Light' : 'Dark';
+                themer(newTheme);
+              }
+            },
+            icon: Icon(Icons.wb_sunny),
           ),
         ],
       ),
@@ -116,11 +136,11 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.pop(context);
                         window.localStorage[DateTime.now().toString()] = [
-                          titleController.text,
-                          descriptionController.text
+                          _titleController.text,
+                          _descriptionController.text
                         ].toString();
-                        titleController.text = '';
-                        descriptionController.text = '';
+                        _titleController.text = '';
+                        _descriptionController.text = '';
                         setState(() {
                           fetchToDos();
                         });
@@ -144,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                     children: <Widget>[
                       TextField(
                         autofocus: true,
-                        controller: titleController,
+                        controller: _titleController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           labelText: 'Title',
@@ -154,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                       TextField(
                         autofocus: true,
                         keyboardType: TextInputType.text,
-                        controller: descriptionController,
+                        controller: _descriptionController,
                         decoration: InputDecoration(
                           labelText: 'Description',
                           hintText: 'Description',
