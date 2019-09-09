@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Kam2do'),
+        title: const Text('Kam2do'),
         actions: <Widget>[
           IconButton(
             onPressed: () => print,
@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                 color: Theme.of(context).primaryColor,
                 shape: BoxShape.rectangle,
               ),
-              child: Center(
+              child: const Center(
                 child: Icon(
                   Icons.work,
                   color: Colors.white,
@@ -91,18 +91,18 @@ class _HomePageState extends State<HomePage> {
             Column(
               children: <Widget>[
                 ListTile(
-                  title: Text('About'),
-                  leading: Icon(Icons.info),
+                  title: const Text('About'),
+                  leading: const Icon(Icons.info),
                   onTap: () {
                     showAboutDialog(
                       context: context,
                       children: [
-                        Text('Kam2do\n'),
-                        Text('Made with \u2764 by Gaurav & Tirth'),
+                        const Text('Kam2do\n'),
+                        const Text('Made with \u2764 by Gaurav & Tirth'),
                       ],
                       applicationName: 'Kam2do',
                       applicationVersion: '0.0.1',
-                      applicationIcon: Icon(
+                      applicationIcon: const Icon(
                         Icons.work,
                         size: 50,
                       ),
@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.all(16),
+        margin: const EdgeInsets.all(16),
         child: ListView(
           children: <Widget>[
             ..._toDoListTiles,
@@ -129,10 +129,10 @@ class _HomePageState extends State<HomePage> {
               barrierDismissible: true,
               builder: (builder) {
                 return AlertDialog(
-                  title: Text('Create New Kam'),
+                  title: const Text('Create New Kam'),
                   actions: <Widget>[
                     FlatButton(
-                      child: Text('Save'),
+                      child: const Text('Save'),
                       onPressed: () {
                         Navigator.pop(context);
                         window.localStorage[DateTime.now().toString()] = [
@@ -146,7 +146,7 @@ class _HomePageState extends State<HomePage> {
                         });
                         return showDialog(
                           context: context,
-                          builder: (builder) => AlertDialog(
+                          builder: (builder) => const AlertDialog(
                             title: Center(
                               child: Text('New Kam Created'),
                             ),
@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                     FlatButton(
-                      child: Text('Cancel'),
+                      child: const Text('Cancel'),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ],
@@ -185,8 +185,8 @@ class _HomePageState extends State<HomePage> {
                 );
               });
         },
-        label: Text('Create Kam'),
-        icon: Icon(Icons.add),
+        label: const Text('Create Kam'),
+        icon: const Icon(Icons.add),
       ),
     );
   }
