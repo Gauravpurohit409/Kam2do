@@ -2,12 +2,12 @@ import 'dart:html';
 
 import 'package:flutter_web/material.dart';
 
-Function themer;
+import '../utils/themes.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage(Function injectedThemer) {
-    themer = injectedThemer;
-  }
+  final Function _themer;
+
+  HomePage(this._themer);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -29,6 +29,8 @@ class _HomePageState extends State<HomePage> {
     List<String> localStorageToDoKeys = window.localStorage.keys.toList();
     localStorageToDoKeys.sort();
     localStorageToDoKeys.remove('theme');
+    localStorageToDoKeys.remove('primaryColor');
+    localStorageToDoKeys.remove('accentColor');
     _toDoListTiles = localStorageToDoKeys
         .map(
           (e) => ListTile(
@@ -48,25 +50,13 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Kam2do'),
         actions: <Widget>[
           IconButton(
-            onPressed: () => print,
-            icon: Icon(Icons.search),
-          ),
-          IconButton(
-            onPressed: () => print,
-            icon: Icon(Icons.favorite),
-          ),
-          IconButton(
-            onPressed: () {
-              if (window.localStorage.containsKey('theme')) {
-                Brightness newTheme = window.localStorage['theme'] == 'Dark'
-                    ? Brightness.light
-                    : Brightness.dark;
-                window.localStorage['theme'] =
-                    window.localStorage['theme'] == 'Dark' ? 'Light' : 'Dark';
-                themer(newTheme);
-              }
+            onPressed: () async {
+              await showDialog(
+                context: context,
+                builder: (builder) => AlertDialogThemer(widget._themer),
+              );
             },
-            icon: Icon(Icons.wb_sunny),
+            icon: const Icon(Icons.palette),
           ),
         ],
       ),
@@ -94,6 +84,7 @@ class _HomePageState extends State<HomePage> {
                   title: const Text('About'),
                   leading: const Icon(Icons.info),
                   onTap: () {
+                    Navigator.pop(context);
                     showAboutDialog(
                       context: context,
                       children: [
@@ -123,8 +114,8 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          showDialog(
+        onPressed: () async {
+          await showDialog(
               context: context,
               barrierDismissible: true,
               builder: (builder) {
@@ -187,6 +178,107 @@ class _HomePageState extends State<HomePage> {
         },
         label: const Text('Create Kam'),
         icon: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class AlertDialogThemer extends StatefulWidget {
+  final Function _themer;
+
+  AlertDialogThemer(this._themer);
+
+  @override
+  _AlertDialogThemerState createState() => _AlertDialogThemerState();
+}
+
+class _AlertDialogThemerState extends State<AlertDialogThemer> {
+  String _primaryColor = window.localStorage['primaryColor'];
+  String _accentColor = window.localStorage['accentColor'];
+  String _theme = window.localStorage['theme'];
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () {
+            if (_primaryColor != null && _theme != null) {
+              window.localStorage['theme'] = _theme;
+              window.localStorage['primaryColor'] = _primaryColor;
+              window.localStorage['accentColor'] = _accentColor;
+              widget._themer(
+                  _theme == 'Dark' ? Brightness.dark : Brightness.light,
+                  primaryColorFromString[_primaryColor],
+                  accentColorFromString[_accentColor]);
+            }
+            Navigator.pop(context);
+          },
+          child: Text('Save'),
+        ),
+      ],
+      title: Text('Look & Feel'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          DropdownButtonFormField(
+            onChanged: (v) {
+              _theme = v;
+            },
+            decoration: InputDecoration(
+              helperText: 'Theme',
+            ),
+            value: _theme,
+            items: [
+              DropdownMenuItem(
+                child: Text('Dark'),
+                value: 'Dark',
+              ),
+              DropdownMenuItem(
+                child: Text('Light'),
+                value: 'Light',
+              ),
+            ],
+          ),
+          DropdownButtonFormField(
+            onChanged: (v) {
+              setState(() {
+                _primaryColor = v;
+              });
+            },
+            value: _primaryColor,
+            decoration: InputDecoration(
+              helperText: 'Primary Color',
+            ),
+            items: [
+              ...primaryColorFromString.keys.map(
+                (p) => DropdownMenuItem(
+                  child: Text(p),
+                  value: p,
+                ),
+              ),
+            ],
+          ),
+          DropdownButtonFormField(
+            onChanged: (v) {
+              setState(() {
+                _accentColor = v;
+              });
+            },
+            value: _accentColor,
+            decoration: InputDecoration(
+              helperText: 'Accent Color',
+            ),
+            items: [
+              ...accentColorFromString.keys.map(
+                (p) => DropdownMenuItem(
+                  child: Text(p),
+                  value: p,
+                ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

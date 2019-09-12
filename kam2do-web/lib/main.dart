@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:flutter_web/material.dart';
 
 import 'ui/home.dart';
+import 'utils/themes.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,17 +14,27 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Brightness _theme = Brightness.light;
+  MaterialColor _primaryColor = Colors.indigo;
+  MaterialAccentColor _accentColor = Colors.pinkAccent;
 
   @override
   void initState() {
     super.initState();
-    if (window.localStorage.containsKey('theme')) {
-      _theme = window.localStorage['theme'] == 'Dark'
-          ? Brightness.dark
-          : Brightness.light;
-    } else {
-      window.localStorage['theme'] = 'Light';
-    }
+    window.localStorage.containsKey('theme')
+        ? _theme = window.localStorage['theme'] == 'Dark'
+            ? Brightness.dark
+            : Brightness.light
+        : window.localStorage['theme'] = 'Light';
+
+    window.localStorage.containsKey('primaryColor')
+        ? _primaryColor =
+            primaryColorFromString[window.localStorage['primaryColor']]
+        : window.localStorage['primaryColor'] = 'Indigo';
+
+    window.localStorage.containsKey('accentColor')
+        ? _accentColor =
+            accentColorFromString[window.localStorage['accentColor']]
+        : window.localStorage['accentColor'] = 'Pink';
   }
 
   @override
@@ -32,8 +43,8 @@ class _MyAppState extends State<MyApp> {
       title: 'Kam2do',
       theme: ThemeData(
         brightness: _theme,
-        primarySwatch: Colors.indigo,
-        accentColor: Colors.pinkAccent,
+        primaryColor: _primaryColor,
+        accentColor: _accentColor,
       ),
       initialRoute: '/',
       routes: {
@@ -42,9 +53,12 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  void themer(Brightness theme) {
+  void themer(Brightness theme, MaterialColor primaryColor,
+      MaterialAccentColor accentColor) {
     setState(() {
       _theme = theme;
+      _primaryColor = primaryColor;
+      _accentColor = accentColor;
     });
   }
 }
