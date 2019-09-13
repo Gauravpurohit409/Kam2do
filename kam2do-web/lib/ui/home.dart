@@ -223,7 +223,9 @@ class _AlertDialogThemerState extends State<AlertDialogThemer> {
         children: <Widget>[
           DropdownButtonFormField(
             onChanged: (v) {
-              _theme = v;
+              setState(() {
+                _theme = v;
+              });
             },
             decoration: InputDecoration(
               helperText: 'Theme',
