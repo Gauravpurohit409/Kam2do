@@ -1,10 +1,8 @@
 # kam2do
 
-A new Flutter application.
+Todo app built using [Flutter](https://flutter.dev)
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
+## Getting Started with Flutter
 
 A few resources to get you started if this is your first Flutter project:
 
