@@ -1,0 +1,26 @@
+name: kam2do
+description: ToDo app built using Flutter.
+version: 0.0.1
+authors:
+  - Gaurav Purohit <gauravpurohit409@gmail.com>
+  - Tirth Patel <pateltirth454@gmail.com>
+
+environment:
+  sdk: ">=2.3.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^0.1.2
+  universal_html:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
