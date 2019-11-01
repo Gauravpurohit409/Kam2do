@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:universal_html/prefer_universal/html.dart' as html;
+import 'package:hive/hive.dart';
 
 import 'ui/home.dart';
 import 'utils/themes.dart';
@@ -18,24 +18,29 @@ class _MyAppState extends State<MyApp> {
   MaterialColor _primaryColor = Colors.indigo;
   MaterialAccentColor _accentColor = Colors.pinkAccent;
 
+  Future _openHiveThemeBox() async {
+    return await Hive.openBox('themeBox');
+  }
+
   @override
   void initState() {
     super.initState();
-    html.window.localStorage.containsKey('theme')
-        ? _theme = html.window.localStorage['theme'] == 'Dark'
-            ? Brightness.dark
-            : Brightness.light
-        : html.window.localStorage['theme'] = 'Light';
-
-    html.window.localStorage.containsKey('primaryColor')
-        ? _primaryColor =
-            primaryColorFromString[html.window.localStorage['primaryColor']]
-        : html.window.localStorage['primaryColor'] = 'Indigo';
-
-    html.window.localStorage.containsKey('accentColor')
-        ? _accentColor =
-            accentColorFromString[html.window.localStorage['accentColor']]
-        : html.window.localStorage['accentColor'] = 'Pink';
+    _openHiveThemeBox().then((themeBox) {
+      if (themeBox.length != 0) {
+        setState(() {
+          _theme = themesFromString[themeBox.get('theme')] ?? Brightness.light;
+          _primaryColor =
+              primaryColorFromString[themeBox.get('primaryColor')] ??
+                  Colors.indigo;
+          _accentColor = accentColorFromString[themeBox.get('accentColor')] ??
+              Colors.pinkAccent;
+        });
+      } else {
+        themeBox.put('theme', 'Light');
+        themeBox.put('primaryColor', 'Indigo');
+        themeBox.put('accentColor', 'Pink');
+      }
+    });
   }
 
   @override
@@ -53,7 +58,7 @@ class _MyAppState extends State<MyApp> {
             ? HomePage(themer)
             : Scaffold(
                 appBar: AppBar(
-                  title: Text('Android Coming Soon'),
+                  title: Text('Kam2do'),
                 ),
                 body: Center(
                   child: Text('Android Coming Soon'),
