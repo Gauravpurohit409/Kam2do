@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^0.1.2
-  universal_html:
+  hive:
 
 dev_dependencies:
   flutter_test:
