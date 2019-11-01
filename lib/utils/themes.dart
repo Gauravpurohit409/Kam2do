@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+const Map<String, Brightness> themesFromString = {
+  'Dark': Brightness.dark,
+  'Light': Brightness.light,
+};
+
 const Map<String, MaterialColor> primaryColorFromString = {
   'Indigo': Colors.indigo,
   'Blue': Colors.blue,
