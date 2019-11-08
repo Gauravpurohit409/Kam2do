@@ -6,7 +6,11 @@ import 'package:hive/hive.dart';
 import 'ui/home.dart';
 import 'utils/constants.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
+  Hive.init('/home/piedcipher/AndroidStudioProjects/Kam2do/database');
+  runApp(MyApp()); 
+}
 
 class MyApp extends StatefulWidget {
   @override
