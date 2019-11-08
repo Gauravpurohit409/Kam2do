@@ -43,3 +43,6 @@ const Map<String, MaterialAccentColor> accentColorFromString = {
   'Lime': Colors.limeAccent,
   'Teal': Colors.tealAccent,
 };
+
+const String kHiveThemeBox = 'themeBox';
+const String kHiveKaamBox = 'kaamBox';
