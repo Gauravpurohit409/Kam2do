@@ -1,6 +1,34 @@
-# kam2do
+# Kam2do
 
-Todo app built using [Flutter](https://flutter.dev)
+Cross-platform Todo app built using [Flutter](https://flutter.dev).
+
+## Features
+- [x] Create Todo
+- [x] Change Primary-Color & Accent-Color
+- [x] Switch between Light/Dark themes
+
+## Platforms (We've tested on)
+- [x] Web
+- [x] Android
+- [x] Linux
+
+## Development
+```
+$ flutter channel master
+$ flutter upgrade
+$ flutter pub get
+
+$ flutter devices
+Linux      • Linux      • linux-x64      • Linux
+Chrome     • chrome     • web-javascript • Google Chrome 78.0.3904.97
+Web Server • web-server • web-javascript • Flutter Tools
+
+$ flutter run -d chrome
+$ flutter run -d Linux
+```
+
+## Dependencies
+- [hive](https://pub.dev/packages/hive)
 
 ## Getting Started with Flutter
 
